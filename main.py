@@ -1,67 +1,54 @@
-class Student:
-    def __init__(self, name, surname, gender):
-        self.name = name
-        self.surname = surname
-        self.gender = gender
-        self.finished_courses = []
-        self.courses_in_progress = []
-        self.grades = {}
-    
-    def rate_hw(self, lecturer, course, grade):
-        if (isinstance(lecturer, Lecturer)
-            and course in self.courses_in_progress
-            and course in lecturer.courses_attached
-            and grade >= 0 and grade <=10):
-            
-            if course in lecturer.grades_lections:
-                lecturer.grades_lections[course] += [grade]
-            else:
-                lecturer.grades_lections[course] = [grade]
-        else:
-            return "Ошибка"
+from cls import Student, Lecturer, Reviewer
+from random import randint
 
-class Mentor:
-    def __init__(self, name, surname):
-        self.name = name
-        self.surname = surname
-        self.courses_attached = []
-        
-class Lecturer(Mentor):
-    def __init__(self, name, surname):
-        super().__init__(name, surname)
-        self.grades_lections = {}
 
-class Reviewer(Mentor):
-    def rate_hw(self, student, course, grade):
-        if (isinstance(student, Student) 
-            and course in self.courses_attached
-            and course in student.courses_in_progress
-            and grade >= 0 and grade <=10):
+best_student = Student('Denis', 'Dorofeev', 'your_gender')
+best_student.courses_in_progress.append("Python")
+best_student.courses_in_progress.append("Git")
+best_student.finished_courses.append("Введение в программирование")
+worst_student = Student('Lera', 'Savkina', 'your_gender')
+worst_student.courses_in_progress.append("Python")
+worst_student.courses_in_progress.append("Git")
+worst_student.finished_courses.append("Введение в программирование")
 
-            if course in student.grades:
-                student.grades[course] += [grade]
-            else:
-                student.grades[course] = [grade]
-        else:
-            return 'Ошибка'
- 
-
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
- 
-best_lecturer = Lecturer("Some", "Buddy")
-best_lecturer.courses_attached += ['Python']
+best_lecturer = Lecturer("Nikita", "Buddy")
+best_lecturer.courses_attached.append("Python")
+best_lecturer.courses_attached.append("Git")
+worst_lecturer = Lecturer("Erik", "Lol")
+worst_lecturer.courses_attached.append("Python")
+worst_lecturer.courses_attached.append("Git")
 
 best_reviewer = Reviewer("Some", "Buddy")
-best_reviewer.courses_attached += ['Python']
+best_reviewer.courses_attached.append("Python")
+best_reviewer.courses_attached.append("Git")
+
+for i in range(11):
+    best_student.rate_hw(best_lecturer, "Python", randint(-10, 10))
+    best_student.rate_hw(worst_lecturer, "Python", randint(-10, 10))
+    worst_student.rate_hw(best_lecturer, "Python", randint(-10, 10))
+    worst_student.rate_hw(worst_lecturer, "Python", randint(-10, 10))
+
+    best_student.rate_hw(best_lecturer, "Git", randint(-10, 10))
+    best_student.rate_hw(worst_lecturer, "Git", randint(-10, 10))
+    worst_student.rate_hw(best_lecturer, "Git", randint(-10, 10))
+    worst_student.rate_hw(worst_lecturer, "Git", randint(-10, 10))
+
+    best_reviewer.rate_hw(best_student, "Python", randint(-10, 10))
+    best_reviewer.rate_hw(worst_student, "Python", randint(-10, 10))
+
+    best_reviewer.rate_hw(best_student, "Git", randint(-10, 10))
+    best_reviewer.rate_hw(worst_student, "Git", randint(-10, 10))
 
 
-best_reviewer.rate_hw(best_student, "Python", 4)
-best_reviewer.rate_hw(best_student, "Python", -4)
-
-best_student.rate_hw(best_lecturer, "Python", 10)
-best_student.rate_hw(best_lecturer, "Python", 112)
-
-
-print(best_student.grades)
-print(best_lecturer.grades_lections)
+print(best_reviewer)
+print()
+print(best_lecturer)
+print()
+print(worst_lecturer)
+print()
+print(best_student)
+print()
+print(worst_student)
+print()
+print(f"Лектор {best_lecturer.name} лучше лектора {worst_lecturer.name}. И это {best_lecturer > worst_lecturer}")
+print(f"Студент {best_student.name} лучше студента {worst_student.name}. И это {best_student > worst_student}")
