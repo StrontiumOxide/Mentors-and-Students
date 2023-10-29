@@ -1,54 +1,41 @@
-from cls import Student, Lecturer, Reviewer
+from cls_def import Student, Lecturer, Reviewer, average_grade_homework, average_grade_lections
 from random import randint
 
 
-best_student = Student('Denis', 'Dorofeev', 'your_gender')
-best_student.courses_in_progress.append("Python")
-best_student.courses_in_progress.append("Git")
-best_student.finished_courses.append("Введение в программирование")
-worst_student = Student('Lera', 'Savkina', 'your_gender')
-worst_student.courses_in_progress.append("Python")
-worst_student.courses_in_progress.append("Git")
-worst_student.finished_courses.append("Введение в программирование")
+list_students = [
+    Student("Denis", "Dorofeev", "Male"),
+    Student("Lera", "Savkina", "Female")
+]
 
-best_lecturer = Lecturer("Nikita", "Buddy")
-best_lecturer.courses_attached.append("Python")
-best_lecturer.courses_attached.append("Git")
-worst_lecturer = Lecturer("Erik", "Lol")
-worst_lecturer.courses_attached.append("Python")
-worst_lecturer.courses_attached.append("Git")
+list_lecturers = [
+    Lecturer("Nikita", "Lol"),
+    Lecturer("Sergey", "Zorin")
+]
 
-best_reviewer = Reviewer("Some", "Buddy")
-best_reviewer.courses_attached.append("Python")
-best_reviewer.courses_attached.append("Git")
+list_reviewers = [
+    Reviewer("Albert", "Cool"),
+    Reviewer("Dima", "Good")
+    ]
 
-for i in range(11):
-    best_student.rate_hw(best_lecturer, "Python", randint(-10, 10))
-    best_student.rate_hw(worst_lecturer, "Python", randint(-10, 10))
-    worst_student.rate_hw(best_lecturer, "Python", randint(-10, 10))
-    worst_student.rate_hw(worst_lecturer, "Python", randint(-10, 10))
+list_courses = ["Python", "Git", "JavaScript"]
 
-    best_student.rate_hw(best_lecturer, "Git", randint(-10, 10))
-    best_student.rate_hw(worst_lecturer, "Git", randint(-10, 10))
-    worst_student.rate_hw(best_lecturer, "Git", randint(-10, 10))
-    worst_student.rate_hw(worst_lecturer, "Git", randint(-10, 10))
-
-    best_reviewer.rate_hw(best_student, "Python", randint(-10, 10))
-    best_reviewer.rate_hw(worst_student, "Python", randint(-10, 10))
-
-    best_reviewer.rate_hw(best_student, "Git", randint(-10, 10))
-    best_reviewer.rate_hw(worst_student, "Git", randint(-10, 10))
+    # Циклы для добавления студентов на курсы и выставление  случайных оценок студентам и лекторам
+for reviewer in list_reviewers:
+    for student in list_students:
+        for lecturer in list_lecturers:
+            for course in list_courses:
+                if course not in student.courses_in_progress:
+                    student.courses_in_progress.append(course)
+                if course not in reviewer.courses_attached:
+                    reviewer.courses_attached.append(course)
+                if course not in lecturer.courses_attached:
+                    lecturer.courses_attached.append(course)
+                
+                reviewer.rate_hw(student, course, randint(1,10))
+                student.rate_hw(lecturer, course, randint(1,10))
 
 
-print(best_reviewer)
-print()
-print(best_lecturer)
-print()
-print(worst_lecturer)
-print()
-print(best_student)
-print()
-print(worst_student)
-print()
-print(f"Лектор {best_lecturer.name} лучше лектора {worst_lecturer.name}. И это {best_lecturer > worst_lecturer}")
-print(f"Студент {best_student.name} лучше студента {worst_student.name}. И это {best_student > worst_student}")
+for course in list_courses:
+    print(f"Средняя оценка по домашним заданиям по курсу {course} равна {average_grade_homework(list_students, course)}")
+    print(f"Средняя оценка за лекции по курса {course} равна {average_grade_lections(list_lecturers, course)}")
+    print()
